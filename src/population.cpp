@@ -28,6 +28,24 @@ Population::Population(
     }
 }
 
+Population::Population(
+    int size,
+    const std::vector<int>& chromosome_list,
+    const std::function<double(const std::vector<int>&)>& evaluate,
+    const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
+    const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
+    const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
+) : size(size), genes(size), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {
+    std::srand(std::time(nullptr));
+    std::random_device rd;
+    std::mt19937 g(rd());
+    for (auto& gene : genes) {
+        gene.resize(chromosome_list.size());
+        gene = chromosome_list;
+        std::shuffle(gene.begin(), gene.end(), g);
+    }    
+}
+
 std::vector<std::vector<int>> Population::get_genes(){
     return genes;
 }

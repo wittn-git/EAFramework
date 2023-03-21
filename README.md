@@ -15,3 +15,4 @@ General framework for Evolutionary Algorithms.
 - compilation options as library
 - more predefined operators
 - permutations as genes
+- testing utils

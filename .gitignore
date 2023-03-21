@@ -35,3 +35,6 @@ build_run.sh
 \.vscode
 \build
 src/main
+src/operators
+src/population
+info.txt
