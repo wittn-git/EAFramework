@@ -6,7 +6,9 @@ Population::Population(
     const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
     const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
     const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
-) : size(initial_genes.size()), genes(initial_genes), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {}
+) : size(initial_genes.size()), genes(initial_genes), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {
+    std::srand(std::time(nullptr));
+}
 
 Population::Population(
     int size,
@@ -17,15 +19,17 @@ Population::Population(
     const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
     const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
 ) : size(size), genes(size), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(0, chromosome_list.size()-1);
+    std::srand(std::time(nullptr));
     for (auto& gene : genes) {
         gene.resize(gene_length);
         for (int j = 0; j < gene_length; j++) {
-            gene[j] = chromosome_list[dist(gen)];
+            gene[j] = chromosome_list[rand() % chromosome_list.size()];
         }
     }
+}
+
+std::vector<std::vector<int>> Population::get_genes(){
+    return genes;
 }
 
 std::vector<int> Population::execute(){

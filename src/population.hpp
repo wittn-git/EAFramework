@@ -1,7 +1,9 @@
 #include <vector>
 #include <functional>
-#include <random>
+#include <ctime>
+#include <cstdlib>
 #include <algorithm>
+#include <string>
 
 class Population{
 
@@ -30,7 +32,8 @@ public:
         const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
         const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
     );
-    std::vector<int> execute();
-    std::vector<std::vector<int>> execute(int generations);
+    std::vector<int> execute(); //executes one iteration of the evolutionary algorithm
+    std::vector<std::vector<int>> execute(int generations); //executes 'generations' iterations of the evolutionary algorithm
+    std::vector<std::vector<int>> get_genes();
     std::string to_string();
 };

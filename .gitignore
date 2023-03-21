@@ -34,3 +34,4 @@
 build_run.sh
 \.vscode
 \build
+src/main
