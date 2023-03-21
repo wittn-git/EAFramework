@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+build_run.sh
+\.vscode
+\build
