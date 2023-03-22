@@ -16,4 +16,4 @@ General framework for Evolutionary Algorithms.
 - more predefined operators
 - testing utils
 - better random functions
-- multi objective
+- correcting pareto rank
