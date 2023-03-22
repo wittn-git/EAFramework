@@ -14,5 +14,6 @@ General framework for Evolutionary Algorithms.
 - filled out README
 - compilation options as library
 - more predefined operators
-- permutations as genes
 - testing utils
+- better random functions
+- multi objective

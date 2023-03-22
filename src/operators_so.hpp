@@ -1,6 +1,7 @@
 #include <functional>
 #include <vector>
 #include <cstdlib>
+#include <numeric>
 
 // Mutation Operators ---------------------------------------------------------------
 
@@ -12,6 +13,7 @@
         - chromosome_max:       maximum value for a chromosome
         - chromosome_min:       minimum value for a chromosome
 */
+
 std::function<std::vector<int>(const std::vector<int>&)> mutate_numeric(double mutation_rate, double incrementation_rate, int chromosome_max, int chromosome_min) {
     return [mutation_rate, incrementation_rate, chromosome_max, chromosome_min](const std::vector<int>& gene) -> std::vector<int> {
         std::vector<int> mutated_gene = gene;
@@ -34,6 +36,7 @@ std::function<std::vector<int>(const std::vector<int>&)> mutate_numeric(double m
     Arguments:
         - mutation_rate:        overall probability of a mutation occurring
 */
+
 std::function<std::vector<int>(const std::vector<int>&)> mutate_swap(double mutation_rate) {
     return [mutation_rate](const std::vector<int>& gene) -> std::vector<int> {
         std::vector<int> mutated_gene = gene;
@@ -114,6 +117,7 @@ std::function<std::vector<int>(const std::vector<double>&, const std::vector<std
 /*
     Midpoint Recombination: Takes the first half of the gene of the first parents gene and the second half of the second parents gene to create a new gene
 */
+
 std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)> recombine_midpoint() { 
     return [](const std::vector<int>& parent1, const std::vector<int>& parent2) -> std::vector<int> {
         std::vector<int> child(parent1.size());
@@ -127,6 +131,7 @@ std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)
 /*
     Twopoint Recombination: Takes a segment of the first parent and adds it to the childs gene. Then it fills out the residual chromosomes in the order of the second parent.
 */
+
 std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)> recombine_twopoint() { 
     return [](const std::vector<int>& parent1, const std::vector<int>& parent2) -> std::vector<int> {
         std::vector<int> child;
@@ -154,6 +159,7 @@ std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)
 /*
     No Recombination: Genes of first parent are returned
 */
+
 std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)> recombine_no() { 
     return [](const std::vector<int>& parent1, const std::vector<int>& parent2) -> std::vector<int> {
         return parent1;
@@ -165,6 +171,7 @@ std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)
 /*
     Sum Evaluation: Assigns fitness values proportional to the sum of the genes chromosomes
 */
+
 std::function<double(const std::vector<int>&)> evaluate_sum() { 
     return [](const std::vector<int>& gene) -> double {
         int sum = 0;
@@ -178,6 +185,7 @@ std::function<double(const std::vector<int>&)> evaluate_sum() {
 /*
     TSP Evaluation: Assigns fitness according to the reciprocated tsp objective function
 */
+
 std::function<double(const std::vector<int>&)> evaluate_tsp(std::function<double(int x, int y)> distance_function) { 
     return [distance_function](const std::vector<int>& gene) -> double {
         int sum = 0;
@@ -192,6 +200,7 @@ std::function<double(const std::vector<int>&)> evaluate_tsp(std::function<double
 /*
     No Evaluation: Fitness is always 1
 */
+
 std::function<double(const std::vector<int>&)> evaluate_no() { 
     return [](const std::vector<int>& gene) -> double {
         return 1;

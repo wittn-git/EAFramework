@@ -9,6 +9,11 @@ add_executable(EAFramework
                 ${CMAKE_SOURCE_DIR}/src/main.cpp
                 ${CMAKE_SOURCE_DIR}/src/population.cpp
                 ${CMAKE_SOURCE_DIR}/src/population.hpp
+                ${CMAKE_SOURCE_DIR}/src/operators_so.hpp
+                ${CMAKE_SOURCE_DIR}/src/population_so.cpp
+                ${CMAKE_SOURCE_DIR}/src/population_so.hpp
+                ${CMAKE_SOURCE_DIR}/src/population_mo.cpp
+                ${CMAKE_SOURCE_DIR}/src/population_mo.hpp
             )                      
 
 target_include_directories(EAFramework PRIVATE include)
