@@ -38,7 +38,7 @@
             std::cout << std::to_string(val) + " ";
         }
         std::cout << "\n";
-    }    
+    }
 
     return 0;
 }

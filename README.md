@@ -15,5 +15,5 @@ General framework for Evolutionary Algorithms.
 - compilation options as library
 - more predefined operators
 - testing utils
+- plotting utils
 - better random functions
-- correcting pareto rank

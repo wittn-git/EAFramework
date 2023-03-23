@@ -37,4 +37,5 @@ build_run.sh
 src/main
 src/operators
 src/population
+src/operators_mo
 info.txt

@@ -58,14 +58,26 @@ std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_pa
         std::vector<int> ranks(fitnesses.size(), 0);
         int current_rank = 1;
         int items_ranked = 0;
-        auto indices = std::ranges::iota_view{0, (int)fitnesses.size()};
         while(items_ranked < fitnesses.size()){
             std::set<int> currently_ranked = {};
-            for(int i = 0; i < fitnesses[0].size(); i++){
-                auto max_ind = std::max_element(indices.begin(), indices.end(), [&](auto a, auto b) {
-                    return ((fitnesses[a][i] < fitnesses[b][i]) && ranks[b] == 0) || (ranks[b] == 0 && ranks[a] != 0);
-                });
-                currently_ranked.emplace(*max_ind);
+            for(int i = 0; i < fitnesses.size(); i++){
+                if(ranks[i] != 0) continue;
+                for(int j = 0; j < fitnesses.size(); j++){
+                    if(i == j || ranks[j] != 0) continue;
+                    bool strict = false;
+                    for(int k = 0; k < fitnesses[i].size(); k++){
+                        if(fitnesses[i][k] > fitnesses[j][k]){
+                            goto not_dominated;
+                        }
+                        if(fitnesses[i][k] < fitnesses[j][k]){
+                            strict = true;
+                        }
+                    }
+                    if(strict) goto dominated;
+                    not_dominated:;
+                }
+                currently_ranked.emplace(i);
+                dominated:;
             }
             for(auto it = currently_ranked.begin(); it != currently_ranked.end(); ++it){
                 ranks[*it] = current_rank;
