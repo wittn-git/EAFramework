@@ -6,6 +6,28 @@
 #include <ranges>
 #include <set>
 
+// Mutation Operators ---------------------------------------------------------------
+
+/*
+    Sigma Block Mutation: Take a random point and the block of 2 times sigma around it, then sort it according to the EDD rule (earliest due date first)
+*/
+
+std::function<std::vector<int>(const std::vector<int>&)> mutate_sigmablock(double mutation_rate, int sigma, std::vector<int> due_dates) {
+    return [mutation_rate, sigma, due_dates](const std::vector<int>& gene) -> std::vector<int> {
+        std::vector<int> mutated_gene = gene;
+        double rand_num = (double)rand() / RAND_MAX;
+        if (rand_num < mutation_rate) {
+            int midpoint = sigma + rand() % (gene.size() - 2*sigma);
+            std::vector<int> block(mutated_gene.begin() + midpoint - sigma, mutated_gene.begin() + midpoint + sigma + 1);
+            std::sort(block.begin(), block.end(), [due_dates](int a, int b) {
+                return due_dates[a] < due_dates[b];
+            });
+            std::copy(block.begin(), block.end(), mutated_gene.begin() + midpoint - sigma);
+        }
+        return mutated_gene;
+    };
+}
+
 // Parent Selection Operators -------------------------------------------------------
 
 /*
