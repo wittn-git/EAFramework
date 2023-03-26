@@ -7,26 +7,27 @@
 
 void test_scheduling(){
 
-    std::vector<int> processing_times = {1,1,2,6,10,2,7,7,9,15};
-    std::vector<int> release_dates = {0,0,0,1,10,16,0,2,5,1};
-    std::vector<int> due_dates = {10,2,4,7,21,18,20,10,17,17};
+    std::vector<int> processing_times = {1, 1, 2, 6, 10, 2,  7,  7,  9,  15};
+    std::vector<int> release_dates =    {0, 0, 0, 1, 10, 30, 0,  2,  5,  1};
+    std::vector<int> due_dates =        {10,2, 4, 7, 21, 36, 20, 10, 17, 17};
     
     std::function<std::vector<double>(const std::vector<int>&)> evaluate_mo = evaluate_scheduling(processing_times, release_dates, due_dates);
-    std::function<std::vector<int>(const std::vector<int>&)> mutate_mo = mutate_sigmablock(0.05, 1, due_dates);
+    std::function<std::vector<int>(const std::vector<int>&)> mutate_mo1 = mutate_sigmablock(0.05, 1, due_dates);
+    std::function<std::vector<int>(const std::vector<int>&)> mutate_mo2 = mutate_swap(0.05);
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)> recombine_mo = nullptr;
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&)> select_mo = select_tournament_rank(4);
     std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_mo = rank_pareto();
 
-    Population_MO population_mo(100, {0,1,2,3,4,5,6,7,8,9}, evaluate_mo, mutate_mo, recombine_mo, rank_mo, select_mo);
-    population_mo.execute_multiple(200, false, true);
-    std::vector<std::vector<int>> bests_mo = population_mo.getBests();
+    Population_MO population_mo(100, {0,1,2,3,4,5,6,7,8,9}, evaluate_mo, mutate_mo1, recombine_mo, rank_mo, select_mo);
+    population_mo.execute_multiple(100, false, true);
+    std::set<std::vector<int>> bests_mo = population_mo.getBests();
     for (auto gene : bests_mo) {
         for (auto chromosome : gene) {
             std::cout << std::to_string(chromosome) + " ";
         }
         std::cout << " -> ";
         for (auto val : evaluate_mo(gene)) {
-            std::cout << std::to_string(val) + " ";
+            std::cout << std::to_string(1/val) + " ";
         }
         std::cout << "\n";
     }
@@ -56,7 +57,7 @@ void test_bel3um(){
     
     Population_MO population_mo(100, 30, {0,1,2,3,4,5,6,7,8,9}, evaluate_mo, mutate_mo, recombine_mo, rank_mo, select_mo);
     population_mo.execute_multiple(70, true, true);
-    std::vector<std::vector<int>> bests_mo = population_mo.getBests();
+    std::set<std::vector<int>> bests_mo = population_mo.getBests();
     for (auto gene : bests_mo) {
         for (auto chromosome : gene) {
             std::cout << std::to_string(chromosome) + " ";

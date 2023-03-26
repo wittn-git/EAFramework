@@ -39,4 +39,5 @@ src/operators
 src/population
 src/tests
 src/operators_mo
+src/population_mo
 info.txt

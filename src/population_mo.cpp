@@ -36,8 +36,8 @@ void Population_MO::execute(bool useRecombination, bool useMutation) {
         fitnessValues[j] = evaluate(genes[j]);
     }
     std::vector<std::vector<int>> new_genes = {};
-    for(int j = 0; j < size; j++){
-        std::vector<int> ranks = rank(fitnessValues);
+    std::vector<int> ranks = rank(fitnessValues);
+    for(int j = 0; j < size; j++){        
         std::vector<int> parent1 = chooseParent(ranks, genes);
         std::vector<int> child = parent1;
         if(useRecombination){
@@ -52,15 +52,15 @@ void Population_MO::execute(bool useRecombination, bool useMutation) {
     genes = new_genes;
 }
 
-std::vector<std::vector<int>> Population_MO::getBests(){
+std::set<std::vector<int>> Population_MO::getBests(){
     std::vector<std::vector<double>> fitnessValues(size);
     for(int i = 0; i < size; i++){
         fitnessValues[i] = evaluate(genes[i]);
     }
     std::vector<int> ranks = rank(fitnessValues);
-    std::vector<std::vector<int>> bests;
+    std::set<std::vector<int>> bests;
     for(int i = 0; i < size; i++){
-        if(ranks[i] == 1) bests.emplace_back(genes[i]);
+        if(ranks[i] == 1) bests.emplace(genes[i]);
     }
     return bests;
 }

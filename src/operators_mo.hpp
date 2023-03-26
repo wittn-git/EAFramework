@@ -93,7 +93,7 @@ std::function<std::vector<double>(const std::vector<int>&)> evaluate_scheduling(
         }
         int tardy_jobs_n = 0;
         int max_lateness = 0;
-        int completion_time = start_points[gene.back()] + processing_times[gene.back()];
+        int completion_time = start_points.back() + processing_times[gene.back()];
         for(int i = 0; i < gene.size(); i++){
             if(start_points[i] + processing_times[gene[i]] > due_dates[gene[i]]){
                 tardy_jobs_n++;
@@ -102,7 +102,7 @@ std::function<std::vector<double>(const std::vector<int>&)> evaluate_scheduling(
                 }
             }
         }
-        return { (double) max_lateness, (double) tardy_jobs_n, (double) completion_time };
+        return { (double) 1/max_lateness, (double) 1/tardy_jobs_n, (double) 1/completion_time };
     };
 }
 

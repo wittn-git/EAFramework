@@ -45,5 +45,5 @@ public:
     );
 
     void execute(bool useRecombination, bool useMutation); //executes one iteration of the evolutionary algorithm
-    std::vector<std::vector<int>> getBests(); //returns the genes with the highest rank in the current population
+    std::set<std::vector<int>> getBests(); //returns the genes with the highest rank in the current population
 };
