@@ -28,6 +28,31 @@ std::function<std::vector<int>(const std::vector<int>&)> mutate_sigmablock(doubl
     };
 }
 
+/*
+    Sigma Block Mutation: Take sigma random positions, then sort it according to the EDD rule (earliest due date first)
+*/
+std::function<std::vector<int>(const std::vector<int>&)> mutate_extsigmablock(double mutation_rate, int sigma, std::vector<int> due_dates) {
+    return [mutation_rate, sigma, due_dates](const std::vector<int>& gene) -> std::vector<int> {
+        std::vector<int> mutated_gene = gene;
+        double rand_num = (double)rand() / RAND_MAX;
+        if (rand_num < mutation_rate) {
+            std::vector<int> indices, points;
+            for(int i = 0; i < sigma; i++){
+                int index = rand() % gene.size();
+                indices.emplace_back(index);
+                points.emplace_back(gene[index]);
+            }
+            std::sort(points.begin(), points.end(), [due_dates](int a, int b) {
+                return due_dates[a] < due_dates[b];
+            });
+            for(int i = 0; i < sigma; i++){
+                mutated_gene[indices[i]] = points[i];
+            }
+        }
+        return mutated_gene;
+    };
+}
+
 // Parent Selection Operators -------------------------------------------------------
 
 /*

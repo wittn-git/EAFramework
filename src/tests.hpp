@@ -12,7 +12,7 @@ void test_scheduling(){
     std::vector<int> due_dates =        {10,2, 4, 7, 21, 36, 20, 10, 17, 17};
     
     std::function<std::vector<double>(const std::vector<int>&)> evaluate_mo = evaluate_scheduling(processing_times, release_dates, due_dates);
-    std::function<std::vector<int>(const std::vector<int>&)> mutate_mo1 = mutate_sigmablock(0.05, 1, due_dates);
+    std::function<std::vector<int>(const std::vector<int>&)> mutate_mo1 = mutate_extsigmablock(0.05, 3, due_dates);
     std::function<std::vector<int>(const std::vector<int>&)> mutate_mo2 = mutate_swap(0.05);
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)> recombine_mo = nullptr;
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&)> select_mo = select_tournament_rank(4);
