@@ -5,8 +5,9 @@ Population_SO::Population_SO(
     const std::function<double(const std::vector<int>&)>& evaluate,
     const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
     const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
-    const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
-) : Population(initial_genes), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {}
+    const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+    u32 seed
+) : Population(initial_genes, seed), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {}
 
 Population_SO::Population_SO(
     int size,
@@ -15,8 +16,9 @@ Population_SO::Population_SO(
     const std::function<double(const std::vector<int>&)>& evaluate,
     const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
     const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
-    const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
-) : Population(size, gene_length, chromosome_list), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {}
+    const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+    u32 seed
+) : Population(size, gene_length, chromosome_list, seed), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {}
 
 Population_SO::Population_SO(
     int size,
@@ -24,8 +26,9 @@ Population_SO::Population_SO(
     const std::function<double(const std::vector<int>&)>& evaluate,
     const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
     const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
-    const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
-) : Population(size, chromosome_list), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {}
+    const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+    u32 seed
+) : Population(size, chromosome_list, seed), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {}
 
 void Population_SO::execute(bool useRecombination, bool useMutation) {
     std::vector<double> fitnessValues(size);

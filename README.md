@@ -16,5 +16,4 @@ General framework for Evolutionary Algorithms.
 - more predefined operators
 - testing utils
 - plotting utils
-- better random functions
 - more efficient evaluation -> if multiple entities can be evaluated

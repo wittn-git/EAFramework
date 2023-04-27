@@ -2,28 +2,23 @@
 
 Population::Population(){};
 
-Population::Population(const std::vector<std::vector<int>>& initial_genes) : size(initial_genes.size()), genes(initial_genes) {
-    std::srand(std::time(nullptr));
-}
+Population::Population(const std::vector<std::vector<int>>& initial_genes, u32 seed) : size(initial_genes.size()), genes(initial_genes), generator(seed) {}
 
-Population::Population(int size, int gene_length, const std::vector<int>& chromosome_list) : size(size), genes(size) {
-    std::srand(std::time(nullptr));
+Population::Population(int size, int gene_length, const std::vector<int>& chromosome_list, u32 seed) : size(size), genes(size), generator(seed) {
+    std::uniform_int_distribution< u32 > distribute( 0, chromosome_list.size()-1 );
     for (auto& gene : genes) {
         gene.resize(gene_length);
         for (int j = 0; j < gene_length; j++) {
-            gene[j] = chromosome_list[rand() % chromosome_list.size()];
+            gene[j] = chromosome_list[distribute( generator )];
         }
     }
 }
 
-Population::Population(int size, const std::vector<int>& chromosome_list) : size(size), genes(size) {
-    std::srand(std::time(nullptr));
-    std::random_device rd;
-    std::mt19937 g(rd());
+Population::Population(int size, const std::vector<int>& chromosome_list, u32 seed) : size(size), genes(size), generator(seed) {
     for (auto& gene : genes) {
         gene.resize(chromosome_list.size());
         gene = chromosome_list;
-        std::shuffle(gene.begin(), gene.end(), g);
+        std::shuffle(gene.begin(), gene.end(), generator);
     }    
 }
 

@@ -16,7 +16,8 @@ public:
         const std::function<double(const std::vector<int>&)>& evaluate,
         const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
         const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
-        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
+        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+        u32 seed
     );
     
     // Constructor for population initialized with random genes of length gene_length using the chromosomes of chromosome_list
@@ -27,7 +28,8 @@ public:
         const std::function<double(const std::vector<int>&)>& evaluate,
         const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
         const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
-        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
+        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+        u32 seed
     );
 
     // Constructor for population initialized with random permutations of the chromosome_list
@@ -37,7 +39,8 @@ public:
         const std::function<double(const std::vector<int>&)>& evaluate,
         const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
         const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
-        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent
+        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+        u32 seed
     );
 
     void execute(bool useRecombination, bool useMutation); //executes one iteration of the evolutionary algorithm

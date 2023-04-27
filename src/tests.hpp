@@ -18,7 +18,7 @@ void test_scheduling(){
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&)> select_mo = select_tournament_rank(4);
     std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_mo = rank_pareto();
 
-    Population_MO population_mo(100, {0,1,2,3,4,5,6,7,8,9}, evaluate_mo, mutate_mo1, recombine_mo, rank_mo, select_mo);
+    Population_MO population_mo(100, {0,1,2,3,4,5,6,7,8,9}, evaluate_mo, mutate_mo1, recombine_mo, rank_mo, select_mo, 0);
     population_mo.execute_multiple(100, false, true);
     std::set<std::vector<int>> bests_mo = population_mo.getBests();
     for (auto gene : bests_mo) {
@@ -39,7 +39,7 @@ void test_sum(){
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)> recombine_so = recombine_midpoint();
     std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>&)> select_so = select_tournament(4);
 
-    Population_SO population_so(100, 30, {0,1,2,3,4,5,6,7,8,9}, evaluate_so, mutate_so, recombine_so, select_so);
+    Population_SO population_so(100, 30, {0,1,2,3,4,5,6,7,8,9}, evaluate_so, mutate_so, recombine_so, select_so, 0);
     population_so.execute_multiple(70, true, true);
     std::vector<int> best_so = population_so.getBest();
     for (auto chromosome : best_so) {
@@ -55,7 +55,7 @@ void test_bel3um(){
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&)> select_mo = select_tournament_rank(4);
     std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_mo = rank_pareto();
     
-    Population_MO population_mo(100, 30, {0,1,2,3,4,5,6,7,8,9}, evaluate_mo, mutate_mo, recombine_mo, rank_mo, select_mo);
+    Population_MO population_mo(100, 30, {0,1,2,3,4,5,6,7,8,9}, evaluate_mo, mutate_mo, recombine_mo, rank_mo, select_mo, 0);
     population_mo.execute_multiple(70, true, true);
     std::set<std::vector<int>> bests_mo = population_mo.getBests();
     for (auto gene : bests_mo) {
