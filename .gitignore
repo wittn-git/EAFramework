@@ -31,12 +31,10 @@
 *.out
 *.app
 
-build_run.sh
 \.vscode
 \build
 src/main
 src/operators
-src/population
 src/tests
 src/operators_mo
 src/population_mo
