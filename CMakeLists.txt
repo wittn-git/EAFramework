@@ -7,9 +7,9 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(EAFramework 
                 ${CMAKE_SOURCE_DIR}/src/main.cpp
-                ${CMAKE_SOURCE_DIR}/src/population.cpp
-                ${CMAKE_SOURCE_DIR}/src/population_so.cpp
-                ${CMAKE_SOURCE_DIR}/src/population_mo.cpp
+                ${CMAKE_SOURCE_DIR}/src/population/population.cpp
+                ${CMAKE_SOURCE_DIR}/src/population/population_so.cpp
+                ${CMAKE_SOURCE_DIR}/src/population/population_mo.cpp
             )                      
 
 target_include_directories(EAFramework PRIVATE include)

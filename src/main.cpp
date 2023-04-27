@@ -1,9 +1,7 @@
 #include "tests.hpp"
-#include <iostream>
-#include <cctype>
-#include <random>
 
 int main() {
+    test_scheduling();
     test_bel3um();
-    return 0;
+    test_sum();
 }

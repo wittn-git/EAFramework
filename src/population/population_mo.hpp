@@ -4,10 +4,10 @@ class Population_MO : public Population{
 
 private:
     const std::function<std::vector<double>(const std::vector<int>&)>& evaluate;
-    const std::function<std::vector<int>(const std::vector<int>&)>& mutate;
-    const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine;
+    const std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)>& mutate;
+    const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937& generator)>& recombine;
     const std::function<std::vector<int>(const std::vector<std::vector<double>>&)>& rank;
-    const std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&)>& chooseParent;
+    const std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&, std::mt19937& generator)>& chooseParent;
 
 public:
 
@@ -15,10 +15,10 @@ public:
     Population_MO(
         const std::vector<std::vector<int>>& initial_genes, 
         const std::function<std::vector<double>(const std::vector<int>&)>& evaluate,
-        const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
-        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
+        const std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)>& mutate,
+        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937& generator)>& recombine,
         const std::function<std::vector<int>(const std::vector<std::vector<double>>&)>& rank,
-        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>& genes, std::mt19937& generator)>& chooseParent,
         u32 seed
     );
 
@@ -28,10 +28,10 @@ public:
         int gene_length,
         const std::vector<int>& chromosome_list,
         const std::function<std::vector<double>(const std::vector<int>&)>& evaluate,
-        const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
-        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
+        const std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)>& mutate,
+        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937& generator)>& recombine,
         const std::function<std::vector<int>(const std::vector<std::vector<double>>&)>& rank,
-        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&)>& chooseParent,
+        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&, std::mt19937& generator)>& chooseParent,
         u32 seed
     );
 
@@ -40,10 +40,10 @@ public:
         int size,
         const std::vector<int>& chromosome_list,
         const std::function<std::vector<double>(const std::vector<int>&)>& evaluate,
-        const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
-        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
+        const std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)>& mutate,
+        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937& generator)>& recombine,
         const std::function<std::vector<int>(const std::vector<std::vector<double>>&)>& rank,
-        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&)>& chooseParent,
+        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&, std::mt19937& generator)>& chooseParent,
         u32 seed
     );
 

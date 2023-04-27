@@ -5,6 +5,10 @@
 #include <utility>
 #include <ranges>
 #include <set>
+#include <iostream>
+#include <random>
+
+using u32 = uint_least32_t; 
 
 // Mutation Operators ---------------------------------------------------------------
 
@@ -12,12 +16,13 @@
     Sigma Block Mutation: Take a random point and the block of 2 times sigma around it, then sort it according to the EDD rule (earliest due date first)
 */
 
-std::function<std::vector<int>(const std::vector<int>&)> mutate_sigmablock(double mutation_rate, int sigma, std::vector<int> due_dates) {
-    return [mutation_rate, sigma, due_dates](const std::vector<int>& gene) -> std::vector<int> {
+std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)> mutate_sigmablock(double mutation_rate, int sigma, std::vector<int> due_dates) {
+    return [mutation_rate, sigma, due_dates](const std::vector<int>& gene, std::mt19937& generator) -> std::vector<int> {
         std::vector<int> mutated_gene = gene;
-        double rand_num = (double)rand() / RAND_MAX;
-        if (rand_num < mutation_rate) {
-            int midpoint = sigma + rand() % (gene.size() - 2*sigma);
+        std::uniform_real_distribution< double > distribute_rate(0, 1);
+        std::uniform_int_distribution< u32 > distribute_point(0, gene.size() - 2*sigma - 1 );
+        if (distribute_rate(generator) < mutation_rate) {
+            int midpoint = sigma + distribute_point(generator);
             std::vector<int> block(mutated_gene.begin() + midpoint - sigma, mutated_gene.begin() + midpoint + sigma + 1);
             std::sort(block.begin(), block.end(), [due_dates](int a, int b) {
                 return due_dates[a] < due_dates[b];
@@ -31,14 +36,15 @@ std::function<std::vector<int>(const std::vector<int>&)> mutate_sigmablock(doubl
 /*
     Sigma Block Mutation: Take sigma random positions, then sort it according to the EDD rule (earliest due date first)
 */
-std::function<std::vector<int>(const std::vector<int>&)> mutate_extsigmablock(double mutation_rate, int sigma, std::vector<int> due_dates) {
-    return [mutation_rate, sigma, due_dates](const std::vector<int>& gene) -> std::vector<int> {
+std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)> mutate_extsigmablock(double mutation_rate, int sigma, std::vector<int> due_dates) {
+    return [mutation_rate, sigma, due_dates](const std::vector<int>& gene, std::mt19937& generator) -> std::vector<int> {
         std::vector<int> mutated_gene = gene;
-        double rand_num = (double)rand() / RAND_MAX;
-        if (rand_num < mutation_rate) {
+        std::uniform_real_distribution< double > distribute_rate(0, 1);
+        std::uniform_int_distribution< u32 > distribute_point(0, gene.size() - 1);
+        if (distribute_rate(generator) < mutation_rate) {
             std::vector<int> indices, points;
             for(int i = 0; i < sigma; i++){
-                int index = rand() % gene.size();
+                int index = distribute_point(generator);
                 indices.emplace_back(index);
                 points.emplace_back(gene[index]);
             }
@@ -61,11 +67,12 @@ std::function<std::vector<int>(const std::vector<int>&)> mutate_extsigmablock(do
         - tournament_size: size of the chosen subgroup
 */
 
-std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&)> select_tournament_rank(int tournament_size) {
-    return [tournament_size](const std::vector<int>& ranks, const std::vector<std::vector<int>>& genes) -> std::vector<int> {
+std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&, std::mt19937&)> select_tournament_rank(int tournament_size) {
+    return [tournament_size](const std::vector<int>& ranks, const std::vector<std::vector<int>>& genes, std::mt19937& generator) -> std::vector<int> {
         std::vector<int> selected_genes(tournament_size);
+        std::uniform_int_distribution< u32 > distribute_point(0, genes.size() - 1);
         for (int i = 0; i < tournament_size; i++) {
-            int rand_index = rand() % genes.size();
+            int rand_index = distribute_point(generator);
             selected_genes[i] = rand_index;
         }
         auto max_it = std::max_element(selected_genes.begin(), selected_genes.end(), [&](int a, int b) {
@@ -138,35 +145,46 @@ std::function<std::vector<double>(const std::vector<int>&)> evaluate_scheduling(
 */
 std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_pareto() { 
     return [](const std::vector<std::vector<double>>& fitnesses) -> std::vector<int> {
-        std::vector<int> ranks(fitnesses.size(), 0);
-        int current_rank = 1;
-        int items_ranked = 0;
-        while(items_ranked < fitnesses.size()){
-            std::set<int> currently_ranked = {};
-            for(int i = 0; i < fitnesses.size(); i++){
-                if(ranks[i] != 0) continue;
-                for(int j = 0; j < fitnesses.size(); j++){
-                    if(i == j || ranks[j] != 0) continue;
-                    bool strict = false;
-                    for(int k = 0; k < fitnesses[i].size(); k++){
-                        if(fitnesses[i][k] > fitnesses[j][k]){
-                            goto not_dominated;
-                        }
-                        if(fitnesses[i][k] < fitnesses[j][k]){
-                            strict = true;
-                        }
-                    }
-                    if(strict) goto dominated;
-                    not_dominated:;
+        auto dominates = ([](std::vector<double> p1, std::vector<double> p2) -> bool {
+            for(int i = 0; i < p1.size(); i++){
+                if(p1[i] < p2[i]){
+                    return false;
                 }
-                currently_ranked.emplace(i);
-                dominated:;
             }
-            for(auto it = currently_ranked.begin(); it != currently_ranked.end(); ++it){
-                ranks[*it] = current_rank;
+            return true;
+        });
+        std::vector<int> ranks(fitnesses.size(), 0);
+        std::vector<int> n(fitnesses.size(), 0);
+        std::vector<std::vector<int>> S(fitnesses.size(), std::vector<int>{});
+        std::vector<std::vector<int>> F = {{}};
+        for(int i = 0; i < fitnesses.size(); i++){
+            for(int j = 0; j < fitnesses.size(); j++){
+                if(i == j) continue;
+                if(dominates(fitnesses[i], fitnesses[j])){
+                    S[i].push_back(j);
+                } else if(dominates(fitnesses[j], fitnesses[i])){
+                    n[i]++;
+                }
             }
-            items_ranked += currently_ranked.size();
-            current_rank++;
+            if(n[i] == 0){
+                ranks[i] = 1;
+                F[0].push_back(i);
+            }
+        }
+        int i = 0;
+        while(!F[i].empty()){
+            std::vector<int> Q = {};
+            for(auto p : F[i]){
+                for(auto q : S[p]){
+                    n[q]--;
+                    if(n[q] == 0){
+                        ranks[q] = i + 2;
+                        Q.push_back(q);
+                    }
+                }
+            }
+            i++;
+            F.push_back(Q);
         }
         return ranks;
     };

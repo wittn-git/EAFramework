@@ -4,9 +4,9 @@ class Population_SO : public Population{
 
 private:
     const std::function<double(const std::vector<int>&)>& evaluate;
-    const std::function<std::vector<int>(const std::vector<int>&)>& mutate;
-    const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine;
-    const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent;
+    const std::function<std::vector<int>(const std::vector<int>&, std::mt19937& generator)>& mutate;
+    const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937& generator)>& recombine;
+    const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes, std::mt19937& generator)>& chooseParent;
 
 public:
 
@@ -14,9 +14,9 @@ public:
     Population_SO(
         const std::vector<std::vector<int>>& initial_genes, 
         const std::function<double(const std::vector<int>&)>& evaluate,
-        const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
-        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
-        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+        const std::function<std::vector<int>(const std::vector<int>&, std::mt19937& generator)>& mutate,
+        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937& generator)>& recombine,
+        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes, std::mt19937& generator)>& chooseParent,
         u32 seed
     );
     
@@ -26,9 +26,9 @@ public:
         int gene_length,
         const std::vector<int>& chromosome_list,
         const std::function<double(const std::vector<int>&)>& evaluate,
-        const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
-        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
-        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+        const std::function<std::vector<int>(const std::vector<int>&, std::mt19937& generator)>& mutate,
+        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937& generator)>& recombine,
+        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes, std::mt19937& generator)>& chooseParent,
         u32 seed
     );
 
@@ -37,9 +37,9 @@ public:
         int size,
         const std::vector<int>& chromosome_list,
         const std::function<double(const std::vector<int>&)>& evaluate,
-        const std::function<std::vector<int>(const std::vector<int>&)>& mutate,
-        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&)>& recombine,
-        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes)>& chooseParent,
+        const std::function<std::vector<int>(const std::vector<int>&, std::mt19937& generator)>& mutate,
+        const std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937& generator)>& recombine,
+        const std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>& genes, std::mt19937& generator)>& chooseParent,
         u32 seed
     );
 
