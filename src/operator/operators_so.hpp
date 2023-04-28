@@ -5,6 +5,40 @@
 
 using u32 = uint_least32_t; 
 
+//Initialization Operators ----------------------------------------------------------
+
+/*
+    Random Initialization: Randomly initialize a gene with chromosomes from chromosome_list
+    Arguments:
+        - size:                 number of chromosomes in gene
+        - chromosome_list:      list of possible values for each chromosome
+*/
+
+std::function<std::vector<int>(std::mt19937&)> initialize_random(int size, const std::vector<int> chromosome_list) {
+    return [size, chromosome_list](std::mt19937& generator) -> std::vector<int> {
+        std::vector<int> gene;
+        std::uniform_int_distribution< u32 > distribute_chromosome(0, chromosome_list.size() - 1);
+        for (int i = 0; i < size; i++) {
+            gene.emplace_back(chromosome_list[distribute_chromosome(generator)]);
+        }
+        return gene;
+    };
+}
+
+/*
+    Random Permutation Initialization: Randomly initialize a gene with a permutation of chromosome_list
+    Arguments:
+        - chromosome_list:      elements of permutation
+*/
+
+std::function<std::vector<int>(std::mt19937&)> initialize_random_permutation(const std::vector<int> chromosome_list) {
+    return [chromosome_list](std::mt19937& generator) -> std::vector<int> {
+        std::vector<int> gene = chromosome_list;
+        std::shuffle(gene.begin(), gene.end(), generator);
+        return gene;
+    };
+}
+
 // Mutation Operators ---------------------------------------------------------------
 
 /*  
