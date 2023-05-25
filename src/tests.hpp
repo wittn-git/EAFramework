@@ -15,10 +15,11 @@ void test_scheduling(){
     std::function<std::vector<double>(const std::vector<int>&)> evaluate_mo = evaluate_scheduling(processing_times, release_dates, due_dates);
     std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)> mutate_mo = mutate_extsigmablock(0.05, 3, due_dates);
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937&)> recombine_mo = nullptr;
-    std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&, std::mt19937&)> select_mo = select_tournament_rank(4);
-    std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_mo = rank_pareto();
+    std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>&, std::mt19937&)> choose_mo = select_tournament_rank(4);
+    std::function<std::vector<double>(const std::vector<std::vector<double>>&)> rank_mo = rank_pareto();
+    std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, const std::vector<std::vector<int>>&)> select_mo = select_offspring();
 
-    Population_MO<std::vector<int>> population_mo(100, initialize_mo, evaluate_mo, mutate_mo, recombine_mo, rank_mo, select_mo, 0);
+    Population_MO<std::vector<int>> population_mo(100, initialize_mo, evaluate_mo, mutate_mo, recombine_mo, rank_mo, choose_mo, select_mo, 0);
     population_mo.execute_multiple(100, false, true);
     std::set<std::vector<int>> bests_mo = population_mo.getBests();
     for (auto gene : bests_mo) {
@@ -39,9 +40,10 @@ void test_sum(){
     std::function<double(const std::vector<int>&)> evaluate_so = evaluate_sum();
     std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)> mutate_so = mutate_numeric(0.1, 0.5, 0, 9);
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937&)> recombine_so = recombine_midpoint();
-    std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>&, std::mt19937&)> select_so = select_tournament(4);
+    std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>&, std::mt19937&)> choose_so = select_tournament(4);
+    std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, const std::vector<std::vector<int>>&)> select_so = select_muh(70, evaluate_so);
 
-    Population_SO<std::vector<int>> population_so(100, initialize_so, evaluate_so, mutate_so, recombine_so, select_so, 0);
+    Population_SO<std::vector<int>> population_so(100, initialize_so, evaluate_so, mutate_so, recombine_so, choose_so, select_so, 0);
     population_so.execute_multiple(70, true, true);
     std::vector<int> best_so = population_so.getBest();
     for (auto chromosome : best_so) {
@@ -56,10 +58,11 @@ void test_bel3um(){
     std::function<std::vector<double>(const std::vector<int>&)> evaluate_mo = evaluate_bel3sum();
     std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)> mutate_mo = mutate_numeric(0.1, 0.5, 0, 9);
     std::function<std::vector<int>(const std::vector<int>&, const std::vector<int>&, std::mt19937&)> recombine_mo = recombine_midpoint();
-    std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&, std::mt19937&)> select_mo = select_tournament_rank(4);
-    std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_mo = rank_pareto();
-    
-    Population_MO<std::vector<int>> population_mo(100, initialize_mo, evaluate_mo, mutate_mo, recombine_mo, rank_mo, select_mo, 0);
+    std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>&, std::mt19937&)> choose_mo = select_tournament_rank(4);
+    std::function<std::vector<double>(const std::vector<std::vector<double>>&)> rank_mo = rank_pareto();
+    std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, const std::vector<std::vector<int>>&)> select_mo = select_offspring();
+
+    Population_MO<std::vector<int>> population_mo(100, initialize_mo, evaluate_mo, mutate_mo, recombine_mo, rank_mo, choose_mo, select_mo, 0);
     population_mo.execute_multiple(70, true, true);
     std::set<std::vector<int>> bests_mo = population_mo.getBests();
     for (auto gene : bests_mo) {
@@ -72,4 +75,8 @@ void test_bel3um(){
         }
         std::cout << "\n";
     }
+}
+
+void test_noah(){
+
 }

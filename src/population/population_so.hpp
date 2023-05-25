@@ -8,13 +8,14 @@ class Population_SO : public Population<T>{
 private:
 
     const std::function<double(const T&)>& evaluate;
-    const std::function<T(const T&, std::mt19937& generator)>& mutate;
-    const std::function<T(const T&, const T&, std::mt19937&)>& recombine;
-    const std::function<T(const std::vector<double>&, const std::vector<T>&, std::mt19937&)>& chooseParent;
 
     using Population<T>::genes;
     using Population<T>::size;
     using Population<T>::generator;
+    using Population<T>::mutate;
+    using Population<T>::recombine;
+    using Population<T>::chooseParent;
+    using Population<T>::select;
 
 public:
 
@@ -25,6 +26,7 @@ public:
         const std::function<T(const T&, std::mt19937&)>& mutate,
         const std::function<T(const T&, const T&, std::mt19937&)>& recombine,
         const std::function<T(const std::vector<double>&, const std::vector<T>& genes, std::mt19937&)>& chooseParent,
+        const std::function<std::vector<T>(const std::vector<T>&, const std::vector<T>&)>& select,
         u32 seed
     );
     
@@ -36,6 +38,7 @@ public:
         const std::function<T(const T&, std::mt19937&)>& mutate,
         const std::function<T(const T&, const T&, std::mt19937&)>& recombine,
         const std::function<T(const std::vector<double>&, const std::vector<T>& genes, std::mt19937&)>& chooseParent,
+        const std::function<std::vector<T>(const std::vector<T>&, const std::vector<T>&)>& select,
         u32 seed
     );
 
@@ -52,8 +55,9 @@ Population_SO<T>::Population_SO(
     const std::function<T(const T&, std::mt19937& generator)>& mutate,
     const std::function<T(const T&, const T&, std::mt19937& generator)>& recombine,
     const std::function<T(const std::vector<double>&, const std::vector<T>& genes, std::mt19937& generator)>& chooseParent,
+    const std::function<std::vector<T>(const std::vector<T>&, const std::vector<T>&)>& select,
     u32 seed
-) : Population<T>(initial_genes, seed), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {}
+) : Population<T>(initial_genes, seed, mutate, recombine, chooseParent, select), evaluate(evaluate) {}
 
 template<typename T>
 Population_SO<T>::Population_SO(
@@ -63,8 +67,9 @@ Population_SO<T>::Population_SO(
     const std::function<T(const T&, std::mt19937&)>& mutate,
     const std::function<T(const T&, const T&, std::mt19937&)>& recombine,
     const std::function<T(const std::vector<double>&, const std::vector<T>& genes, std::mt19937&)>& chooseParent,
+    const std::function<std::vector<T>(const std::vector<T>&, const std::vector<T>&)>& select,
     u32 seed
-) : Population<T>(size, initialize, seed), evaluate(evaluate), mutate(mutate), recombine(recombine), chooseParent(chooseParent) {}
+) : Population<T>(size, initialize, seed, mutate, recombine, chooseParent, select), evaluate(evaluate) {}
 
 template<typename T>
 void Population_SO<T>::execute(bool useRecombination, bool useMutation) {

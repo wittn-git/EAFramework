@@ -67,8 +67,8 @@ std::function<std::vector<int>(const std::vector<int>&, std::mt19937&)> mutate_e
         - tournament_size: size of the chosen subgroup
 */
 
-std::function<std::vector<int>(const std::vector<int>&, const std::vector<std::vector<int>>&, std::mt19937&)> select_tournament_rank(int tournament_size) {
-    return [tournament_size](const std::vector<int>& ranks, const std::vector<std::vector<int>>& genes, std::mt19937& generator) -> std::vector<int> {
+std::function<std::vector<int>(const std::vector<double>&, const std::vector<std::vector<int>>&, std::mt19937&)> select_tournament_rank(int tournament_size) {
+    return [tournament_size](const std::vector<double>& ranks, const std::vector<std::vector<int>>& genes, std::mt19937& generator) -> std::vector<int> {
         std::vector<int> selected_genes(tournament_size);
         std::uniform_int_distribution< u32 > distribute_point(0, genes.size() - 1);
         for (int i = 0; i < tournament_size; i++) {
@@ -143,8 +143,8 @@ std::function<std::vector<double>(const std::vector<int>&)> evaluate_scheduling(
 /*
     Pareto Ranking - Ranks vectors of fitness values based on pareto optimality
 */
-std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_pareto() { 
-    return [](const std::vector<std::vector<double>>& fitnesses) -> std::vector<int> {
+std::function<std::vector<double>(const std::vector<std::vector<double>>&)> rank_pareto() { 
+    return [](const std::vector<std::vector<double>>& fitnesses) -> std::vector<double> {
         auto dominates = ([](std::vector<double> p1, std::vector<double> p2) -> bool {
             for(int i = 0; i < p1.size(); i++){
                 if(p1[i] < p2[i]){
@@ -153,7 +153,7 @@ std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_pa
             }
             return true;
         });
-        std::vector<int> ranks(fitnesses.size(), 0);
+        std::vector<double> ranks(fitnesses.size(), 0);
         std::vector<int> n(fitnesses.size(), 0);
         std::vector<std::vector<int>> S(fitnesses.size(), std::vector<int>{});
         std::vector<std::vector<int>> F = {{}};
@@ -187,5 +187,17 @@ std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_pa
             F.push_back(Q);
         }
         return ranks;
+    };
+}
+
+// Offspring Selection Operators ----------------------------------------------------
+
+/*
+    Offspring Selection - Selects just offpsring as offspring 
+*/
+
+std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, const std::vector<std::vector<int>>&)> select_offspring() { 
+    return [](const std::vector<std::vector<int>>& parents, const std::vector<std::vector<int>>& offspring) -> std::vector<std::vector<int>> {
+        return offspring;
     };
 }
