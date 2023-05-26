@@ -31,3 +31,7 @@ This repository implements this general process while allowing for costum operat
 - survivor selection
 - generic encoding
 - more efficient evaluation -> if multiple entities can be evaluated
+
+## TODO
+- rework random
+- prevent need for double evaluation
