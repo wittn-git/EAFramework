@@ -1,9 +1,6 @@
 #include <functional>
 #include <vector>
 #include <random>
-#include <cstdint>
-
-using u32 = uint_least32_t;
 
 // Mutation Operators ---------------------------------------------------------------
 
@@ -19,11 +16,11 @@ using u32 = uint_least32_t;
 std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_numeric(double mutation_rate, double incrementation_rate, int chromosome_max, int chromosome_min) {
     return [mutation_rate, incrementation_rate, chromosome_max, chromosome_min](const std::vector<std::vector<int>>& genes, std::mt19937& generator) -> std::vector<std::vector<int>> {
         std::vector<std::vector<int>> mutated_genes(genes.size());
-        std::transform(genes.begin(), genes.end(), mutated_genes.begin(), [mutation_rate, incrementation_rate, chromosome_max, chromosome_min, generator](const std::vector<int>& gene) -> std::vector<int> {
+        std::uniform_real_distribution< double > distribute_rate(0, 1);
+        std::uniform_int_distribution< int > distribute_point(0, genes[0].size() - 1);
+        std::transform(genes.begin(), genes.end(), mutated_genes.begin(), [mutation_rate, incrementation_rate, chromosome_max, chromosome_min, &generator, distribute_rate, distribute_point](const std::vector<int>& gene) mutable -> std::vector<int> {
             std::vector<int> mutated_gene = gene;
-            std::uniform_real_distribution< double > distribute_rate(0, 1);
             if (distribute_rate(generator) < mutation_rate) {
-                std::uniform_int_distribution< u32 > distribute_point(0, gene.size() - 1 );
                 int chromosome = distribute_point(generator);
                 if (distribute_rate(generator) < incrementation_rate) {
                     mutated_gene[chromosome] = std::min(chromosome_max, mutated_gene[chromosome] + 1);
@@ -46,13 +43,13 @@ std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&
 std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_swap(double mutation_rate) {
     return [mutation_rate](const std::vector<std::vector<int>>& genes, std::mt19937& generator) -> std::vector<std::vector<int>> {
         std::vector<std::vector<int>> mutated_genes(genes.size());
-        std::transform(genes.begin(), genes.end(), mutated_genes.begin(), [mutation_rate, generator](const std::vector<int>& gene) -> std::vector<int> {
+        std::uniform_real_distribution< double > distribute_rate(0, 1);
+        std::uniform_int_distribution< int > distribute_point(0, genes[0].size() - 1 );
+        std::transform(genes.begin(), genes.end(), mutated_genes.begin(), [mutation_rate, &generator, distribute_rate, distribute_point](const std::vector<int>& gene) mutable -> std::vector<int> {
             std::vector<int> mutated_gene = gene;
-            std::uniform_real_distribution< double > distribute_rate(0, 1);
             if (distribute_rate(generator) < mutation_rate) {
-                std::uniform_int_distribution< u32 > distribute_point(0, gene.size() - 1 );
-                int chromosome1 =  distribute_point(generator);
-                int chromosome2 =  distribute_point(generator);
+                int chromosome1 = distribute_point(generator);
+                int chromosome2 = distribute_point(generator);
                 mutated_gene[chromosome1] = gene[chromosome2];
                 mutated_gene[chromosome2] = gene[chromosome1];
             }
@@ -71,12 +68,12 @@ std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&
 */
 
 std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_sigmablock(double mutation_rate, int sigma, std::vector<int> due_dates) {
-    return [mutation_rate, sigma, due_dates](const std::vector<std::vector<int>>& gene, std::mt19937& generator) -> std::vector<std::vector<int>> {
-        std::vector<std::vector<int>> mutated_genes(gene.size());
-        std::transform(gene.begin(), gene.end(), mutated_genes.begin(), [mutation_rate, sigma, due_dates, generator](const std::vector<int>& gene) -> std::vector<int> {
+    return [mutation_rate, sigma, due_dates](const std::vector<std::vector<int>>& genes, std::mt19937& generator) -> std::vector<std::vector<int>> {
+        std::vector<std::vector<int>> mutated_genes(genes.size());
+        std::uniform_real_distribution< double > distribute_rate(0, 1);
+        std::uniform_int_distribution< int > distribute_point(0, genes[0].size() - 2*sigma - 1 );
+        std::transform(genes.begin(), genes.end(), mutated_genes.begin(), [mutation_rate, sigma, due_dates, &generator, distribute_rate, distribute_point](const std::vector<int>& gene) mutable -> std::vector<int> {
             std::vector<int> mutated_gene = gene;
-            std::uniform_real_distribution< double > distribute_rate(0, 1);
-            std::uniform_int_distribution< u32 > distribute_point(0, gene.size() - 2*sigma - 1 );
             if (distribute_rate(generator) < mutation_rate) {
                 int midpoint = sigma + distribute_point(generator);
                 std::vector<int> block(mutated_gene.begin() + midpoint - sigma, mutated_gene.begin() + midpoint + sigma + 1);
@@ -101,16 +98,19 @@ std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&
 */
 
 std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_extsigmablock(double mutation_rate, int sigma, std::vector<int> due_dates) {
-    return [mutation_rate, sigma, due_dates](const std::vector<std::vector<int>>& gene, std::mt19937& generator) -> std::vector<std::vector<int>> {
-        std::vector<std::vector<int>> mutated_genes(gene.size());
-        std::transform(gene.begin(), gene.end(), mutated_genes.begin(), [mutation_rate, sigma, due_dates, generator](const std::vector<int>& gene) -> std::vector<int> {
+    return [mutation_rate, sigma, due_dates](const std::vector<std::vector<int>>& genes, std::mt19937& generator) -> std::vector<std::vector<int>> {
+        std::vector<std::vector<int>> mutated_genes(genes.size());
+        std::uniform_real_distribution< double > distribute_rate(0, 1);
+        std::uniform_int_distribution< int > distribute_point(0, genes[0].size() - 1 );
+        std::transform(genes.begin(), genes.end(), mutated_genes.begin(), [mutation_rate, sigma, due_dates, &generator, distribute_rate, distribute_point](const std::vector<int>& gene) mutable -> std::vector<int> {
             std::vector<int> mutated_gene = gene;
-            std::uniform_real_distribution< double > distribute_rate(0, 1);
-            std::uniform_int_distribution< u32 > distribute_point(0, gene.size() - 1 );
             if (distribute_rate(generator) < mutation_rate) {
                 std::vector<int> indices, points;
-                for(int i = 0; i < sigma; i++){
+                while(indices.size() < sigma){
                     int index = distribute_point(generator);
+                    if(std::find(indices.begin(), indices.end(), index) != indices.end()){
+                        continue;
+                    }
                     indices.emplace_back(index);
                     points.emplace_back(gene[index]);
                 }

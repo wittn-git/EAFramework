@@ -1,9 +1,6 @@
 #include <functional>
 #include <vector>
 #include <random>
-#include <cstdint>
-
-using u32 = uint_least32_t;
 
 // Recombination Operators ----------------------------------------------------------
 
@@ -15,7 +12,7 @@ std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&
     return [](const std::vector<std::vector<int>>& parents, std::mt19937& generator) -> std::vector<std::vector<int>> {
         std::vector<std::vector<int>> children(parents.size());
         int procreations_n = parents.size() % 2 == 0 ? parents.size() : parents.size()-1;
-        for(int i = 0; i < procreations_n; i+=2){
+        for(int i = 0; i < procreations_n; i++){
             std::vector<int> parent1 = i % 2 == 0 ? parents[i] : parents[i-1];
             std::vector<int> parent2 = i % 2 == 0 ? parents[i+1] : parents[i];
             std::vector<int> child(parent1.size());
@@ -39,13 +36,13 @@ std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&
     return [](const std::vector<std::vector<int>>& parents, std::mt19937& generator) -> std::vector<std::vector<int>> {
         std::vector<std::vector<int>> children(parents.size());
         int procreations_n = parents.size() % 2 == 0 ? parents.size() : parents.size()-1;
+        std::uniform_int_distribution< int > distribute_point1(0, parents[0].size() - 2);
         for(int i = 0; i < procreations_n; i+=2){
             std::vector<int> parent1 = i % 2 == 0 ? parents[i] : parents[i-1];
             std::vector<int> parent2 = i % 2 == 0 ? parents[i+1] : parents[i];
             std::vector<int> child(parent1.size());
-            std::uniform_real_distribution< double > distribute_point1(0, parent1.size() - 2);
             int i1 = distribute_point1(generator);
-            std::uniform_real_distribution< double > distribute_point2(0, parent1.size() - i1 - 2);
+            std::uniform_int_distribution< int > distribute_point2(0, parent1.size() - i1 - 2);
             int i2 = distribute_point2(generator) + i1;
             std::vector<int> segment(parent1.begin() + i1, parent1.begin() + i2);
             int j = 0;

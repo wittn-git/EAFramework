@@ -1,9 +1,6 @@
 #include <functional>
 #include <vector>
 #include <random>
-#include <cstdint>
-
-using u32 = uint_least32_t;
 
 // Ranking Operators-----------------------------------------------------------------
 
@@ -13,7 +10,7 @@ using u32 = uint_least32_t;
 template<typename T, typename L>
 std::function<std::vector<int>(const std::vector<T>&)> rank_pareto(std::function<std::vector<L>(const std::vector<T>&)> evaluate) { 
     return [evaluate](const std::vector<T>& genes) -> std::vector<int> {
-        auto dominates = ([](std::vector<double> p1, std::vector<double> p2) -> bool {
+        auto dominates = ([](L p1, L p2) -> bool {
             for(int i = 0; i < p1.size(); i++){
                 if(p1[i] < p2[i]){
                     return false;
@@ -21,9 +18,8 @@ std::function<std::vector<int>(const std::vector<T>&)> rank_pareto(std::function
             }
             return true;
         });
-        std::vector<std::vector<double>> fitnesses(genes.size());
-        std::transform(genes.begin(), genes.end(), fitnesses.begin(), evaluate);
-        std::vector<double> ranks(fitnesses.size(), 0);
+        std::vector<L> fitnesses = evaluate(genes);
+        std::vector<int> ranks(fitnesses.size(), 0);
         std::vector<int> n(fitnesses.size(), 0);
         std::vector<std::vector<int>> S(fitnesses.size(), std::vector<int>{});
         std::vector<std::vector<int>> F = {{}};

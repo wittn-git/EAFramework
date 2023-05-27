@@ -1,9 +1,6 @@
 #include <functional>
 #include <vector>
 #include <cstdlib>
-#include <numeric>
-
-using u32 = uint_least32_t; 
 
 // Survivor selection operators ----------------------------------------------------
 
@@ -14,8 +11,8 @@ using u32 = uint_least32_t;
         - evaluate: function taking a vector of genes and returning a vector of fitnesses
 */
 
-template<typename T>
-std::function<std::vector<T>(const std::vector<T>&, const std::vector<T>&)> select_muh(int mu, std::function<std::vector<double>(const T&)> evaluate) {
+template<typename T, typename L>
+std::function<std::vector<T>(const std::vector<T>&, const std::vector<T>&)> select_muh(int mu, std::function<std::vector<L>(const std::vector<T>&)> evaluate) {
     return [mu, evaluate](const std::vector<T>& parents, const std::vector<T>& offspring) -> std::vector<T> {
         std::vector<T> combined = parents;
         combined.insert(combined.end(), offspring.begin(), offspring.end());

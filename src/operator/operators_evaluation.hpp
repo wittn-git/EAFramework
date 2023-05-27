@@ -1,9 +1,6 @@
 #include <functional>
 #include <vector>
 #include <random>
-#include <cstdint>
-
-using u32 = uint_least32_t; 
 
 // Evaluation Operators -------------------------------------------------------------
 

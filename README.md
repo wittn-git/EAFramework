@@ -34,4 +34,4 @@ This repository implements this general process while allowing for costum operat
 
 ## TODO
 - rework random
-- prevent need for double evaluation
+- default arguments
