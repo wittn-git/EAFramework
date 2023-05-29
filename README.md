@@ -15,23 +15,15 @@ The process usally follows the same pattern:
 
 This repository implements this general process while allowing for costum operators for encoding, evaluation, recombination, mutation and survivor selection.
 
-## Installation
-
 ## Usage
 ### Creating a population
+To define a population, include the "population.hpp" file in your project. Every population has the same basic building blocks:
+
 ### Using predefined operators
 ### Defining operators
 
 ## Coming Soon
 - filled out README
 - compilation options as library
-- more predefined operators
 - testing utils
 - plotting utils
-- survivor selection
-- generic encoding
-- more efficient evaluation -> if multiple entities can be evaluated
-
-## TODO
-- rework random
-- default arguments

@@ -11,10 +11,9 @@
         - rank:            function taking a vector of genes and returning a vector of ranks
 */
 
-template<typename T>
-std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> select_tournament_rank(int tournament_size, std::function<std::vector<int>(const std::vector<T>&)> rank) {
-    return [tournament_size, rank](const std::vector<T>& genes, std::mt19937& generator) -> std::vector<std::vector<int>> {
-        std::vector<int> ranks = rank(genes);
+template<typename T, typename L>
+std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_tournament_rank(int tournament_size) {
+    return [tournament_size](const std::vector<T>& genes, const std::vector<L>& fitnesses, const std::vector<int>& ranks, std::mt19937& generator) -> std::vector<std::vector<int>> {
         std::vector<T> parents(genes.size());
         std::uniform_int_distribution< int > distribute_point(0, genes.size() - 1);
         std::transform(parents.begin(), parents.end(), parents.begin(), [&](T& parent) mutable -> T {
@@ -39,9 +38,8 @@ std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> select_tourn
 */
 
 template <typename T, typename L>
-std::function<std::vector<int>(const std::vector<std::vector<int>>&, std::mt19937&)> select_roulette(std::function<std::vector<L>(const std::vector<T>&)> evaluate) {
-    return [evaluate](const std::vector<std::vector<int>>& genes, std::mt19937& generator) -> std::vector<int> {
-        std::vector<L> fitnesses = evaluate(genes);
+std::function<std::vector<int>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_roulette() {
+    return [](const std::vector<T>& genes, const std::vector<L>& fitnesses, const std::vector<int>& ranks, std::mt19937& generator) -> std::vector<int> {
         std::vector<T> selected_genes(fitnesses.size());
         double total_fitness = std::accumulate(fitnesses.begin(), fitnesses.end(), 0.0);
         std::vector<double> probabilities(fitnesses.size());
@@ -67,9 +65,8 @@ std::function<std::vector<int>(const std::vector<std::vector<int>>&, std::mt1993
 */
 
 template<typename T, typename L>
-std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> select_tournament(int tournament_size, std::function<std::vector<L>(const std::vector<T>&)> evaluate) {
-    return [tournament_size, evaluate](const std::vector<std::vector<int>>& genes, std::mt19937& generator) -> std::vector<T> {
-        std::vector<double> fitnesses = evaluate(genes);
+std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_tournament(int tournament_size) {
+    return [tournament_size](const std::vector<T>& genes, const std::vector<L>& fitnesses, const std::vector<int>& ranks, std::mt19937& generator) -> std::vector<T> {
         std::vector<T> selected_genes(genes.size());
         std::uniform_int_distribution< int > distribute_point(0, genes.size() - 1 );
         std::transform(selected_genes.begin(), selected_genes.end(), selected_genes.begin(), [&](T& selected_gene) mutable -> T {

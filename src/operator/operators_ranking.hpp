@@ -7,9 +7,9 @@
 /*
     Pareto Ranking - Ranks vectors of fitness values based on pareto optimality
 */
-template<typename T, typename L>
-std::function<std::vector<int>(const std::vector<T>&)> rank_pareto(std::function<std::vector<L>(const std::vector<T>&)> evaluate) { 
-    return [evaluate](const std::vector<T>& genes) -> std::vector<int> {
+template<typename L>
+std::function<std::vector<int>(const std::vector<L>&)> rank_pareto() {
+    return [](const std::vector<L>& fitnesses) -> std::vector<int> {
         auto dominates = ([](L p1, L p2) -> bool {
             for(int i = 0; i < p1.size(); i++){
                 if(p1[i] < p2[i]){
@@ -18,7 +18,6 @@ std::function<std::vector<int>(const std::vector<T>&)> rank_pareto(std::function
             }
             return true;
         });
-        std::vector<L> fitnesses = evaluate(genes);
         std::vector<int> ranks(fitnesses.size(), 0);
         std::vector<int> n(fitnesses.size(), 0);
         std::vector<std::vector<int>> S(fitnesses.size(), std::vector<int>{});

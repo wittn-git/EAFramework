@@ -12,12 +12,14 @@
 */
 
 template<typename T, typename L>
-std::function<std::vector<T>(const std::vector<T>&, const std::vector<T>&)> select_muh(int mu, std::function<std::vector<L>(const std::vector<T>&)> evaluate) {
-    return [mu, evaluate](const std::vector<T>& parents, const std::vector<T>& offspring) -> std::vector<T> {
+std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>, const std::vector<T>&)> select_muh(int mu, std::function<std::vector<L>(const std::vector<T>&)> evaluate) {
+    return [mu, evaluate](const std::vector<T>& parents, const std::vector<L>& fitnesses_parents, const std::vector<int>& ranks_parents, const std::vector<T>& offspring) -> std::vector<T> {
         std::vector<T> combined = parents;
         combined.insert(combined.end(), offspring.begin(), offspring.end());
+        std::vector<L> fitnesses = fitnesses_parents;
+        std::vector<L> fitnesses_children = evaluate(offspring);
+        fitnesses.insert(fitnesses.end(), fitnesses_children.begin(), fitnesses_children.end());
         std::vector<T> selected_genes(mu);
-        std::vector<double> fitnesses = evaluate(combined);
         std::vector<int> indices(combined.size());
         std::iota(indices.begin(), indices.end(), 0);
         std::partial_sort(indices.begin(), indices.begin() + mu, indices.end(), [&](int a, int b) {
