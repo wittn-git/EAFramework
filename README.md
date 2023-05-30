@@ -199,7 +199,7 @@ std::function<std::vector<double>(const std::vector<std::vector<int>>&)> evaluat
     };
 };
 ```
-which defines a costum evaluation function that takes two fixed parameters and multiplies the chromosome at position parameter1 with parameter2. It can then be initialized as follows:
+which defines a costum evaluation function that takes two fixed parameters and multiplies the chromosome at position parameter1 with parameter2 and takes the overall sum. It can then be initialized as follows:
 ```c++
 std::function<std::vector<double>(const std::vector<std::vector<int>>&)> evaluate = evaluate_costum(2, 0.5);
 ```
