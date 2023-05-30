@@ -22,7 +22,7 @@ void test_scheduling(){
     std::function<std::vector<L>(const std::vector<T>&)> evaluate_mo = evaluate_scheduling(processing_times, release_dates, due_dates);
     std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_parents_mo = select_tournament_rank<T, L>(4);
     std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> mutate_mo = mutate_extsigmablock(0.05, 3, due_dates);
-    std::function<std::vector<int>(const std::vector<L>&)> rank_mo = rank_pareto<L>();
+    std::function<T(const std::vector<L>&)> rank_mo = rank_pareto<L>();
     
     Population<T, L> population_mo(0, initialize_mo, evaluate_mo, select_parents_mo, mutate_mo, nullptr, nullptr, rank_mo);
     population_mo.execute_multiple(100);
@@ -50,7 +50,7 @@ void test_sum(){
     std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_parents_so = select_tournament<T, L>(4);
     std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> mutate_so = mutate_numeric(0.1, 0.5, 0, 9);
     std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> recombine_so = recombine_midpoint();
-    std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>, const std::vector<T>&, std::mt19937&)> select_so = select_mu<T, L>(100, evaluate_so);
+    std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)> select_so = select_mu<T, L>(100, evaluate_so);
 
     Population<T, L> population_so(0, initialize_so, evaluate_so, select_parents_so, mutate_so, recombine_so, select_so, nullptr);
     population_so.execute_multiple(100);
@@ -69,12 +69,13 @@ void test_bel3um(){
     using T = std::vector<int>;
     using L = std::vector<double>;
     
+
     std::function<std::vector<T>(std::mt19937&)> initialize_mo = initialize_random(100, 30, {0,1,2,3,4,5,6,7,8,9});
     std::function<std::vector<L>(const std::vector<T>&)> evaluate_mo = evaluate_bel3sum();
     std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_parents_mo = select_tournament_rank<T, L>(4);
     std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> mutate_mo = mutate_numeric(0.1, 0.5, 0, 9);
     std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> recombine_mo = recombine_midpoint();
-    std::function<std::vector<int>(const std::vector<L>&)> rank_mo = rank_pareto<L>();
+    std::function<T(const std::vector<L>&)> rank_mo = rank_pareto<L>();
    
     Population<T, L> population_mo(0, initialize_mo, evaluate_mo, select_parents_mo, mutate_mo, recombine_mo, nullptr, rank_mo);
     population_mo.execute_multiple(70);
