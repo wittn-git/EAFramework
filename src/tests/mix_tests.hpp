@@ -1,11 +1,11 @@
-#include "population/population.hpp"
-#include "operator/operators_parentSelection.hpp"
-#include "operator/operators_mutation.hpp"
-#include "operator/operators_recombination.hpp"
-#include "operator/operators_survivorSelection.hpp"
-#include "operator/operators_evaluation.hpp"
-#include "operator/operators_initialization.hpp"
-#include "operator/operators_ranking.hpp"
+#include "../population/population.hpp"
+#include "../operator/operators_parentSelection.hpp"
+#include "../operator/operators_mutation.hpp"
+#include "../operator/operators_recombination.hpp"
+#include "../operator/operators_survivorSelection.hpp"
+#include "../operator/operators_evaluation.hpp"
+#include "../operator/operators_initialization.hpp"
+#include "../operator/operators_ranking.hpp"
 
 #include <iostream>
 

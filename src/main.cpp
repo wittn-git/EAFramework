@@ -1,4 +1,4 @@
-#include "tests.hpp"
+#include "tests/mix_tests.hpp"
 
 int main() {
     test_bel3um();
