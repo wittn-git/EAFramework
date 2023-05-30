@@ -157,10 +157,10 @@ std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&
 std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> recombine_twopoint();
 ```
 Survivor Selection:
-- muh-Selection: Selects the best muh individuals from the combined population of parents and offspring
+- mu-Selection: Selects the best mu individuals from the combined population of parents and offspring
 ```c++
 template<typename T, typename L>
-std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)> select_muh(int muh);
+std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)> select_mu(int mu);
 ```
 Ranking:
 - Pareto Ranking - Ranks vectors of fitness values based on pareto optimality

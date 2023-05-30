@@ -50,7 +50,7 @@ void test_sum(){
     std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_parents_so = select_tournament<T, L>(4);
     std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> mutate_so = mutate_numeric(0.1, 0.5, 0, 9);
     std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)> recombine_so = recombine_midpoint();
-    std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)> select_so = select_muh<T, L>(100, evaluate_so);
+    std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>, const std::vector<T>&, std::mt19937&)> select_so = select_mu<T, L>(100, evaluate_so);
 
     Population<T, L> population_so(0, initialize_so, evaluate_so, select_parents_so, mutate_so, recombine_so, select_so, nullptr);
     population_so.execute_multiple(100);
