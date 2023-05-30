@@ -89,84 +89,84 @@ std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const
 
  The following operators are already implemented:
  Initialization:
-    - Random initialization: Randomly initialize a gene of length gene_length with chromosomes from chromosome_list
-    ```c++
-    std::function<std::vector<std::vector<int>>(std::mt19937&)> initialize_random(int population_size, int gene_length, const std::vector<int> chromosome_list);
-    ```
-    - Random Permutation Initialization: Randomly initialize a gene with a permutation of chromosome_list
-    ```c++
-    std::function<std::vector<std::vector<int>>(std::mt19937&)> initialize_random_permutation(int population_size, const std::vector<int> chromosome_list);
-    ```
+- Random initialization: Randomly initialize a gene of length gene_length with chromosomes from chromosome_list
+```c++
+std::function<std::vector<std::vector<int>>(std::mt19937&)> initialize_random(int population_size, int gene_length, const std::vector<int> chromosome_list);
+```
+- Random Permutation Initialization: Randomly initialize a gene with a permutation of chromosome_list
+```c++
+std::function<std::vector<std::vector<int>>(std::mt19937&)> initialize_random_permutation(int population_size, const std::vector<int> chromosome_list);
+```
 Evaluation:
-    - Sum Evaluation: Assigns fitness values proportional to the sum of the genes chromosomes
-    ```c++
-    std::function<std::vector<double>(const std::vector<std::vector<int>>&)> evaluate_sum();
-    ```
-    - TSP Evaluation: Assigns fitness according to the reciprocated tsp objective function
-    ```c++
-    std::function<std::vector<double>(const std::vector<std::vector<int>>&)> evaluate_tsp(std::function<double(int x, int y)> distance_function);
-    ```
-    - Below3 Sum Evaluation: Assigns one fitness values proportional to the sum of the genes chromosomes and one based on the occurence of numbers below 3
-    ```c++
-    std::function<std::vector<double>(const std::vector<std::vector<int>>&)> evaluate_below3();
-    ```
-    - Scheduling Evaluation: Evaluates Machine Jobs based on maximum lateness, number of tardy jobs and overall completion time
-    ```c++
-    std::function<std::vector<std::vector<double>>(const std::vector<std::vector<int>>&)> evaluate_scheduling(std::vector<int> processing_times, std::vector<int> release_dates, std::vector<int> due_dates);
-    ```
+- Sum Evaluation: Assigns fitness values proportional to the sum of the genes chromosomes
+```c++
+std::function<std::vector<double>(const std::vector<std::vector<int>>&)> evaluate_sum();
+```
+- TSP Evaluation: Assigns fitness according to the reciprocated tsp objective function
+```c++
+std::function<std::vector<double>(const std::vector<std::vector<int>>&)> evaluate_tsp(std::function<double(int x, int y)> distance_function);
+```
+- Below3 Sum Evaluation: Assigns one fitness values proportional to the sum of the genes chromosomes and one based on the occurence of numbers below 3
+```c++
+std::function<std::vector<double>(const std::vector<std::vector<int>>&)> evaluate_below3();
+```
+- Scheduling Evaluation: Evaluates Machine Jobs based on maximum lateness, number of tardy jobs and overall completion time
+```c++
+std::function<std::vector<std::vector<double>>(const std::vector<std::vector<int>>&)> evaluate_scheduling(std::vector<int> processing_times, std::vector<int> release_dates, std::vector<int> due_dates);
+```
 Parent Selection:
-    - Tournament Parent Selection: Take a random subgroup of a specified size and choose the one with the best rank
-    ```c++
-    template<typename T, typename L>
-    std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_tournament(int tournament_size);
-    ```
-    - Roulette Parent Selection: Select parents with a probability proportional to their fitness
-    ```c++
-    template<typename T, typename L>
-    std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_roulette();
-    ```
-    - Tournament Parent Selection: Take a random subgroup of a specified size and choose the one with the highest fitness value
-    ```c++
-    template<typename T, typename L>
-    std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_tournament(int tournament_size);
-    ```
+- Tournament Parent Selection: Take a random subgroup of a specified size and choose the one with the best rank
+```c++
+template<typename T, typename L>
+std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_tournament(int tournament_size);
+```
+- Roulette Parent Selection: Select parents with a probability proportional to their fitness
+```c++
+template<typename T, typename L>
+std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_roulette();
+```
+- Tournament Parent Selection: Take a random subgroup of a specified size and choose the one with the highest fitness value
+```c++
+template<typename T, typename L>
+std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)> select_tournament(int tournament_size);
+```
 Mutation:
-    - Numeric Mutation: Increment or decrement one chromosome by one
-    ```c++
-    std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_numeric(double mutation_rate, double incrementation_rate, int chromosome_max, int chromosome_min);
-    ```
-    - Swap Mutation: Swap two chromosomes
-    ```c++
-    std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_swap(double mutation_rate);
-    ```
-    - Sigma Block Mutation: Take a random point and the block of 2 times sigma around it, then sort it according to the EDD rule (earliest due date first)
-    ```c++
-    std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_sigmablock(double mutation_rate, int sigma, std::vector<int> due_dates)
-    ```
-    - Extended Sigma Block Mutation: Take sigma random positions, then sort it according to the EDD rule (earliest due date first)
-    ```c++
-    std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_extsigmablock(double mutation_rate, int sigma, std::vector<int> due_dates)
-    ```
+- Numeric Mutation: Increment or decrement one chromosome by one
+```c++
+std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_numeric(double mutation_rate, double incrementation_rate, int chromosome_max, int chromosome_min);
+```
+- Swap Mutation: Swap two chromosomes
+```c++
+std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_swap(double mutation_rate);
+```
+- Sigma Block Mutation: Take a random point and the block of 2 times sigma around it, then sort it according to the EDD rule (earliest due date first)
+```c++
+std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_sigmablock(double mutation_rate, int sigma, std::vector<int> due_dates)
+```
+- Extended Sigma Block Mutation: Take sigma random positions, then sort it according to the EDD rule (earliest due date first)
+```c++
+std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> mutate_extsigmablock(double mutation_rate, int sigma, std::vector<int> due_dates)
+```
 Recombination:
-    - Midpoint Recombination: Takes the first half of the gene of the first parents gene and the second half of the second parents gene to create a new gene, parents are the pairs of genes iterating the list of genes
-    ```c++
-    std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> recombine_midpoint();
-    ```
-    - Twopoint Recombination: Takes a segment of the first parent and adds it to the childs gene. Then it fills out the residual chromosomes in the order of the second parent.
-    ```c++
-    std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> recombine_twopoint();
-    ```
+- Midpoint Recombination: Takes the first half of the gene of the first parents gene and the second half of the second parents gene to create a new gene, parents are the pairs of genes iterating the list of genes
+```c++
+std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> recombine_midpoint();
+```
+- Twopoint Recombination: Takes a segment of the first parent and adds it to the childs gene. Then it fills out the residual chromosomes in the order of the second parent.
+```c++
+std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&, std::mt19937&)> recombine_twopoint();
+```
 Survivor Selection:
-    - muh-Selection: Selects the best muh individuals from the combined population of parents and offspring
-    ```c++
-    template<typename T, typename L>
-    std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)> select_muh(int muh);
-    ```
+- muh-Selection: Selects the best muh individuals from the combined population of parents and offspring
+```c++
+template<typename T, typename L>
+std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)> select_muh(int muh);
+```
 Ranking:
-    - Pareto Ranking - Ranks vectors of fitness values based on pareto optimality
-    ```c++
-    std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_pareto();
-    ```
+- Pareto Ranking - Ranks vectors of fitness values based on pareto optimality
+```c++
+std::function<std::vector<int>(const std::vector<std::vector<double>>&)> rank_pareto();
+```
 
 ### Defining operators
 It is also possible to define operators costumarily. To do so, the according function signature has to be followed. 
