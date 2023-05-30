@@ -67,7 +67,16 @@ public:
     void execute_multiple(int generations); //executes 'generations' iterations of the evolutionary algorithm
     std::vector<T> get_bests(bool keep_duplicats); //returns the best genes in the population
     std::vector<T> get_genes(); //returns the current genes in the population
+    void set_genes(std::vector<T> genes); //sets the genes of the population
     std::string to_string(); //returns a string representation of the population
+
+    void set_evaluate(const std::function<std::vector<L>(const std::vector<T>&)>& evaluate);
+    void set_selectParents(const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)>& selectParents);
+    void set_mutate(const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& mutate);
+    void set_recombine(const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& recombine);
+    void set_selectSurvivors(const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)>& selectSurvivors);
+    void set_rank(const std::function<std::vector<int>(const std::vector<L>&)>& rank);
+
 };
 
 // Class Implementation ---------------------------------------------------------------------------------------------------------------------
@@ -156,6 +165,11 @@ std::vector<T> Population<T, L>::get_genes(){
 }
 
 template<typename T, typename L>
+void Population<T, L>::set_genes(std::vector<T> genes){
+    this.genes = genes;
+}
+
+template<typename T, typename L>
 std::string Population<T, L>::to_string(){
     std::string s;
     for (auto gene : genes) {
@@ -163,3 +177,16 @@ std::string Population<T, L>::to_string(){
     }
     return s;
 }
+
+template<typename T, typename L>
+void Population<T, L>::set_evaluate(const std::function<std::vector<L>(const std::vector<T>&)>& evaluate){ this.evaluate = evaluate;}
+template<typename T, typename L>
+void Population<T, L>::set_selectParents(const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)>& selectParents){ this.selectParents = selectParents;}
+template<typename T, typename L>
+void Population<T, L>::set_mutate(const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& mutate){ this.mutate = mutate;}
+template<typename T, typename L>
+void Population<T, L>::set_recombine(const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& recombine){ this.recombine = recombine;}
+template<typename T, typename L>
+void Population<T, L>::set_selectSurvivors(const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)>& selectSurvivors){ this.selectSurvivors = selectSurvivors;}
+template<typename T, typename L>
+void Population<T, L>::set_rank(const std::function<std::vector<int>(const std::vector<L>&)>& rank){ this.rank = rank;}
