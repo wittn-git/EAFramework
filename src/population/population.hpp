@@ -31,7 +31,7 @@ private:
     // Function taking a vector of genes of type T and returning a vector of recombined genes of type T
     const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& recombine;
     // Function taking two vectors of genes of type T (parents and children) and returning a selected vector of genes of type T
-    const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&)>& selectSurvivors;
+    const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)>& selectSurvivors;
     // Function taking a vector of fitness values of type L and returning a vector of ranks of type int
     const std::function<std::vector<int>(const std::vector<L>&)>& rank;
 
@@ -47,7 +47,7 @@ public:
         const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)>& selectParents,
         const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& mutate = nullptr,
         const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& recombine = nullptr,
-        const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&)>& selectSurvivors = nullptr,
+        const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)>& selectSurvivors = nullptr,
         const std::function<std::vector<int>(const std::vector<L>&)>& rank = nullptr
     );
 
@@ -59,7 +59,7 @@ public:
         const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)>& selectParents,
         const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& mutate = nullptr,
         const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& recombine = nullptr,
-        const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&)>& selectSurvivors = nullptr,
+        const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)>& selectSurvivors = nullptr,
         const std::function<std::vector<int>(const std::vector<L>&)>& rank = nullptr
     );
 
@@ -80,7 +80,7 @@ Population<T, L>::Population(
     const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)>& selectParents,
     const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& mutate,
     const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& recombine,
-    const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&)>& selectSurvivors,
+    const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)>& selectSurvivors,
     const std::function<std::vector<int>(const std::vector<L>&)>& rank
 ) : generator(seed), genes(initial_genes), evaluate(evaluate), selectParents(selectParents), mutate(mutate), recombine(recombine), selectSurvivors(selectSurvivors), rank(rank) {
     check_types();
@@ -94,7 +94,7 @@ Population<T, L>::Population(
     const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, std::mt19937&)>& selectParents,
     const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& mutate,
     const std::function<std::vector<T>(const std::vector<T>&, std::mt19937&)>& recombine,
-    const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&)>& selectSurvivors,
+    const std::function<std::vector<T>(const std::vector<T>&, const std::vector<L>&, const std::vector<int>&, const std::vector<T>&, std::mt19937&)>& selectSurvivors,
     const std::function<std::vector<int>(const std::vector<L>&)>& rank
 ) : generator(seed), evaluate(evaluate), selectParents(selectParents), mutate(mutate), recombine(recombine), selectSurvivors(selectSurvivors), rank(rank) {
     check_types();
@@ -113,7 +113,7 @@ void Population<T, L>::execute() {
     std::vector<T> parents = selectParents(genes, fitnesses, ranks, generator);
     std::vector<T> children = (recombine == nullptr) ? parents : recombine(parents, generator);
     children = (mutate == nullptr) ? children : mutate(children, generator);
-    genes = (selectSurvivors == nullptr) ? children : selectSurvivors(genes, fitnesses, ranks, children);
+    genes = (selectSurvivors == nullptr) ? children : selectSurvivors(genes, fitnesses, ranks, children, generator);
 }
 
 template<typename T, typename L>

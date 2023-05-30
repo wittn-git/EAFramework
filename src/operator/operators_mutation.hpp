@@ -5,7 +5,7 @@
 // Mutation Operators ---------------------------------------------------------------
 
 /*  
-    Numeric Mutation: Increment or decrement one bit by one
+    Numeric Mutation: Increment or decrement one chromosome by one
     Arguments:
         - mutation_rate:        overall probability of a mutation occurring
         - incrementation_rate:  probability of the mutation being an incrementation
@@ -35,7 +35,7 @@ std::function<std::vector<std::vector<int>>(const std::vector<std::vector<int>>&
 }
 
 /*  
-    Swap Mutation: Swap two bits
+    Swap Mutation: Swap two chromosomes
     Arguments:
         - mutation_rate:        overall probability of a mutation occurring
 */

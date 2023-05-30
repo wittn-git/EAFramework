@@ -5,7 +5,7 @@
 //Initialization Operators ----------------------------------------------------------
 
 /*
-    Random Initialization: Randomly initialize a gene with chromosomes from chromosome_list
+    Random Initialization: Randomly initialize a gene of length gene_length with chromosomes from chromosome_list
     Arguments:
         - population_size:      number of genes in population
         - gene_length:          number of chromosomes in gene
